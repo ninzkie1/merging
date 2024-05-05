@@ -1,0 +1,165 @@
+﻿@{
+    ViewBag.Title = "Shop";
+    Layout = "~/Views/Shared/_LayoutShop.cshtml";
+} 
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h4 class="my-4">Featured Products</h4>
+        </div>
+        <div class="col-md-4">
+            <!-- Search Bar -->
+            <form class="form-inline my-4 my-lg-0" onsubmit="searchProducts(event)">
+                <input class="form-control mr-sm-2" type="search" id="searchInput" placeholder="Search for products..." aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <!-- Dropdown Categories -->
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Categories
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#" onclick="displayPopularProducts()">Popular</a>
+                    <a class="dropdown-item" href="#" onclick="displayAllProducts()">All Products</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#" onclick="displayPlants()">Plants</a>
+                    <a class="dropdown-item" href="#" onclick="displayFertilizerProducts()">Fertilizer</a>
+                    <a class="dropdown-item" href="#" onclick="displaySoilProducts()">Soil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Products -->
+    <div class="row mt-4" id="featuredProducts">
+        <!-- Products will be displayed dynamically here -->
+    </div>
+</div>
+
+<!-- jQuery (required by Bootstrap) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- Bootstrap JS (must be placed after jQuery) -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    const allProducts = [
+        { name: "Monstera Deliciosa", category: "Plants", price: "$25.00" },
+        { name: "Snake Plant", category: "Plants", price: "$18.00" },
+        { name: "Fiddle Leaf Fig", category: "Plants", price: "$30.00" },
+        { name: "Fertilizer 1", category: "Fertilizer", price: "$10.00" },
+        { name: "Fertilizer 2", category: "Fertilizer", price: "$12.00" },
+        { name: "Fertilizer 3", category: "Fertilizer", price: "$15.00" },
+        { name: "Soil 1", category: "Soil", price: "$8.00" },
+        { name: "Soil 2", category: "Soil", price: "$10.00" },
+        { name: "Soil 3", category: "Soil", price: "$12.00" }
+    ];
+
+    // Display all products initially
+    displayAllProducts();
+
+    // Function to display products based on search query
+    function searchProducts(event) {
+        event.preventDefault(); // Prevent form submission
+
+        const searchInput = document.getElementById("searchInput");
+        const searchTerm = searchInput.value.trim().toLowerCase();
+
+        const filteredProducts = allProducts.filter(product => {
+            return product.name.toLowerCase().includes(searchTerm);
+        });
+
+        displayProducts(filteredProducts);
+    }
+
+    // Function to display all products
+    function displayAllProducts() {
+        displayProducts(allProducts);
+    }
+
+    // Function to display popular products
+    function displayPopularProducts() {
+        const popularProducts = [
+            { name: "Monstera Deliciosa", category: "Plants", price: "$25.00" },
+            { name: "Snake Plant", category: "Plants", price: "$18.00" },
+            { name: "Fertilizer 1", category: "Fertilizer", price: "$10.00" },
+            { name: "Soil 1", category: "Soil", price: "$8.00" }
+        ];
+
+        displayProducts(popularProducts);
+    }
+
+    // Function to display plant products
+    function displayPlants() {
+        const plantProducts = allProducts.filter(product => product.category === "Plants");
+        displayProducts(plantProducts);
+    }
+
+    // Function to display fertilizer products
+    function displayFertilizerProducts() {
+        const fertilizerProducts = allProducts.filter(product => product.category === "Fertilizer");
+        displayProducts(fertilizerProducts);
+    }
+
+    // Function to display soil products
+    function displaySoilProducts() {
+        const soilProducts = allProducts.filter(product => product.category === "Soil");
+        displayProducts(soilProducts);
+    }
+
+    // Function to display products dynamically
+    function displayProducts(products) {
+        const productContainer = document.getElementById("featuredProducts");
+        productContainer.innerHTML = ""; // Clear previous products
+
+        products.forEach(product => {
+            let imageUrl = ""; // Default image URL
+
+            // Set specific image URLs based on product name
+            if (product.name === "Snake Plant") {
+                imageUrl = "https://abeautifulmess.com/wp-content/uploads/2023/05/Snakeplant-4.jpg";
+            } else if (product.name === "Fiddle Leaf Fig") {
+                imageUrl = "https://tierraplants.com/wp-content/uploads/2017/05/Fiddle-leaf-edit.jpg";
+            } else {
+                // Default image URL for other products
+                imageUrl = "https://www.smallandgreen.com/wp-content/uploads/2022/04/R_8FXiuKEemVpNz4j5wv6w-pnja_Dv0EeyYyr60XqKDaw-scaled.jpeg";
+            }
+
+            const productCard = `
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="${imageUrl}" alt="Product Image">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">${product.name}</h5>
+                            <p class="card-text">Description goes here...</p>
+                            <p class="price">${product.price}</p>
+                            <button class="btn btn-shop">Shop Now</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            productContainer.innerHTML += productCard;
+        });
+    }
+</script>
+
+<style>
+    /* Styles for product image containers */
+    .card-image {
+        height: 200px; /* Set the desired height for the image container */
+        overflow: hidden; /* Hide any overflow (e.g., if images are larger) */
+    }
+
+        /* Styles for product images */
+        .card-image img {
+            width: 100%; /* Ensure images take up full width of their containers */
+            height: auto; /* Maintain aspect ratio */
+        }
+</style>
+/
