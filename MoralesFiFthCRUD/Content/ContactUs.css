@@ -1,0 +1,51 @@
+﻿
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #343a40; /* Dark background color */
+                color: #ffffff; /* White text color */
+                padding-top: 60px; /* Adjust to match navbar height */
+            }
+
+            .contact-form {
+                max-width: 500px;
+                margin: 0 auto;
+                background-color: #454d55; /* Darker background for form */
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            }
+
+                .contact-form h2 {
+                    text-align: center;
+                    margin-bottom: 20px;
+                }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            label {
+                font-weight: bold;
+            }
+
+            textarea {
+                height: 100px;
+                resize: vertical; /* Allow vertical resizing of textarea */
+            }
+
+            button[type="submit"] {
+                display: block;
+                width: 100%;
+                padding: 10px;
+                border: none;
+                border-radius: 5px;
+                background-color: #28a745; /* Dark green button color */
+                color: #ffffff; /* White text color */
+                font-size: 16px;
+                cursor: pointer;
+            }
+
+                button[type="submit"]:hover {
+                    background-color: #ffffff; /* Darker green on hover */
+                }body {
+}
