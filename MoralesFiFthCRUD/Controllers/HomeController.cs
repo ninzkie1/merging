@@ -127,14 +127,6 @@ namespace MoralesFiFthCRUD.Controllers
         {
             return View();
         }
-        public ActionResult profileclient()
-        {
-            return View();
-        }
-        public ActionResult profiletutor()
-        {
-            return View();
-        }
         public ActionResult About()
         {
             return View();
@@ -167,6 +159,14 @@ namespace MoralesFiFthCRUD.Controllers
         {
             return View();
 
+        }
+        public ActionResult Userprofile()
+        {
+            return View();
+        }
+        public ActionResult Resellerprofile()
+        {
+            return View();
         }
     }
 }

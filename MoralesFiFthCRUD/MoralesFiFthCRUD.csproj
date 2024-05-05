@@ -135,8 +135,8 @@
     <Content Include="Content\Landingpagestyle.css" />
     <Content Include="Content\login.css" />
     <Content Include="Content\messageus.css" />
-    <Content Include="Content\profileclient.css" />
-    <Content Include="Content\profiletutor.css" />
+    <Content Include="Content\Userprofile.css" />
+    <Content Include="Content\Resellerprofile.css" />
     <Content Include="Content\SellerView.css" />
     <Content Include="Content\SignUp.css" />
     <Content Include="Content\Site.css" />
@@ -231,8 +231,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Home\Login.cshtml" />
-    <Content Include="Views\Home\profileclient.cshtml" />
-    <Content Include="Views\Home\profiletutor.cshtml" />
+    <Content Include="Views\Home\Userprofile.cshtml" />
+    <Content Include="Views\Home\Resellerprofile.cshtml" />
     <EntityDeploy Include="TutorModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>TutorModel.Designer.cs</LastGenOutput>

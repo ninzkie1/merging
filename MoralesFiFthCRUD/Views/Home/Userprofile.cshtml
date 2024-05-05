@@ -1,0 +1,185 @@
+﻿@{
+    ViewBag.Title = "Userprofile";
+}
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>User Profile</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="~/Content/Userprofile.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #006400;">
+        <div class="container">
+            <a class="navbar-brand" href="#">Plant Shop</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <!-- Use ml-auto to push items to the right -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Profile</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10"><h1 class="mt-4 mb-4">User Profile</h1></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <!--left col-->
+                <div class="text-center">
+                    <div class="avatar-container">
+                        <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail" alt="avatar" style="width: 150px; height: 150px;">
+                    </div>
+                    <h6 class="mt-3">Upload a different photo...</h6>
+                    <!-- Disable file upload -->
+                    <input type="file" class="text-center center-block file-upload" disabled>
+                </div><hr><br>
+                <div class="panel panel-default">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Website <i class="fa fa-link fa-1x"></i></div>
+                        <div class="panel-body"><a href="http://PLANTSHOP.com">PLANTSHOP.com</a></div>
+                    </div>
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item text-muted">Activity <i class="fa fa-dashboard fa-1x"></i></li>
+                    <!-- Populate list items -->
+                    <li class="list-group-item d-flex justify-content-between align-items-center"><span>Shares</span><span class="badge badge-primary badge-pill">1000</span></li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center"><span>Likes</span><span class="badge badge-primary badge-pill">500</span></li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center"><span>Posts</span><span class="badge badge-primary badge-pill">200</span></li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center"><span>Followers</span><span class="badge badge-primary badge-pill">10000</span></li>
+                </ul>
+                <div class="edit-section">
+                    <h5 class="text-center mb-3">EDIT</h5>
+                    <div class="form-group btn-group d-flex justify-content-center">
+                        <button type="button" class="btn btn-success" id="SaveBtn">Save</button>
+                        <button type="button" class="btn btn-primary" id="editBtn">Edit</button>
+                        <button type="button" class="btn btn-danger" id="resetBtn">Reset</button>
+                    </div>
+                </div>
+            </div><!--/col-3-->
+            <div class="col-md-9">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#home">Home</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="home">
+                        <hr>
+                        <form class="form" action="##" method="post" id="registrationForm">
+                            <div class="form-group">
+                                <label for="first_name"><h4>First name</h4></label>
+                                <!-- Populate input field -->
+                                <input type="text" class="form-control" name="first_name" id="first_name" placeholder="First name" title="Enter your first name if any." value="John" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="last_name"><h4>Last name</h4></label>
+                                <!-- Populate input field -->
+                                <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Last name" title="Enter your last name if any." value="Tumulak" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone"><h4>Phone number</h4></label>
+                                <!-- Populate input field -->
+                                <input type="text" class="form-control" name="phone" id="phone" placeholder="Phone number" title="Enter your phone number if any." value="+639238970223" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="email"><h4>Email</h4></label>
+                                <!-- Populate input field -->
+                                <input type="email" class="form-control" name="email" id="email" placeholder="Email" title="Enter your email." value="JohnClifford@gmail.com" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="location"><h4>Location</h4></label>
+                                <!-- Populate input field -->
+                                <input type="text" class="form-control" name="location" id="location" placeholder="Location" title="Enter your location" value="Mercado" disabled>
+                            </div>
+                            <div class="form-group password-input">
+                                <label for="password"><h4>Password</h4></label>
+                                <!-- Populate input field -->
+                                <div class="input-group">
+                                    <input type="password" class="form-control" name="password" id="password" placeholder="Password" title="Enter your password." value="John@123" disabled>
+                                    <div class="input-group-append eye-icon-container">
+                                        <span class="eye-icon" id="eye-icon"><i class="fas fa-eye" style="color: #888;"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div><!--/col-9-->
+        </div><!--/row-->
+    </div><!--/container-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+$(document).ready(function(){
+    // Initially disable the Reset button
+    $('#resetBtn').prop('disabled', true);
+
+    $('#editBtn').click(function(){
+        // Toggle the disabled attribute of input fields
+        $('input').prop('disabled', function(i, v) { return !v; });
+
+        // Enable the Reset button
+        $('#resetBtn').prop('disabled', function(i, v) { return !v; });
+    });
+
+    $('#eye-icon').click(function() {
+        var passwordField = $('#password');
+        var fieldType = passwordField.attr('type');
+        if (fieldType === 'password') {
+            passwordField.attr('type', 'text');
+        } else {
+            passwordField.attr('type', 'password');
+        }
+    });
+
+    $('#resetBtn').click(function() {
+        // Clear all input fields
+        $('input').val('');
+    });
+
+    // Save button click event
+    $('#SaveBtn').click(function() {
+        // Disable all input fields
+        $('input').prop('disabled', true);
+    });
+
+    // Rating interaction
+    $('input[type="radio"]').on('change', function() {
+        var ratingValue = $(this).val();
+        // Do something with the rating value, like sending it to the server
+        console.log("User rated:", ratingValue);
+    });
+});
+    </script>
+</body>
+</html>
