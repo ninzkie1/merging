@@ -32,5 +32,6 @@ namespace MoralesFiFthCRUD
         public virtual DbSet<UserRole> UserRole { get; set; }
         public virtual DbSet<vw_UserRole> vw_UserRole { get; set; }
         public virtual DbSet<Cart> Cart { get; set; }
+        public virtual DbSet<PurchaseDetails> PurchaseDetails { get; set; }
     }
 }

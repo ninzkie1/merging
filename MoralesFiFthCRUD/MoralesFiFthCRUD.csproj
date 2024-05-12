@@ -228,6 +228,9 @@
       <DependentUpon>ModelPlant.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PurchaseDetails.cs">
+      <DependentUpon>ModelPlant.tt</DependentUpon>
+    </Compile>
     <Compile Include="Repository\BaseRepository.cs" />
     <Compile Include="Role.cs">
       <DependentUpon>ModelPlant.tt</DependentUpon>
@@ -239,6 +242,7 @@
       <DependentUpon>ModelPlant.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\ProductViewModel.cs" />
+    <Compile Include="ViewModels\SellerViewModel.cs" />
     <Compile Include="vw_UserRole.cs">
       <DependentUpon>ModelPlant.tt</DependentUpon>
     </Compile>

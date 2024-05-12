@@ -23,6 +23,7 @@
     <NavigationProperty Name="Category" Relationship="Self.FK_Products_Category1" FromRole="Products" ToRole="Category" />
     <NavigationProperty Name="User" Relationship="Self.FK_Products_User" FromRole="Products" ToRole="User" />
     <NavigationProperty Name="Cart" Relationship="database2Model.FK_Cart_Products" FromRole="Products" ToRole="Cart" />
+    <NavigationProperty Name="PurchaseDetails" Relationship="database2Model.FK_PurchaseDetails_Products" FromRole="Products" ToRole="PurchaseDetails" />
   </EntityType>
   <EntityType Name="Role">
     <Key>
@@ -47,6 +48,7 @@
     <NavigationProperty Name="Products" Relationship="Self.FK_Products_User" FromRole="User" ToRole="Products" />
     <NavigationProperty Name="UserRole" Relationship="Self.FK_UserRole_User" FromRole="User" ToRole="UserRole" />
     <NavigationProperty Name="Cart" Relationship="database2Model.FK_Cart_User" FromRole="User" ToRole="Cart" />
+    <Property Name="UserImg" Type="Binary" MaxLength="Max" FixedLength="false" />
   </EntityType>
   <EntityType Name="UserRole">
     <Key>
@@ -147,6 +149,11 @@
       <End Role="User" EntitySet="User" />
       <End Role="Cart" EntitySet="Cart" />
     </AssociationSet>
+    <EntitySet Name="PurchaseDetails" EntityType="database2Model.PurchaseDetails" />
+    <AssociationSet Name="FK_PurchaseDetails_Products" Association="database2Model.FK_PurchaseDetails_Products">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="PurchaseDetails" EntitySet="PurchaseDetails" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="Cart">
     <Key>
@@ -156,7 +163,7 @@
     <Property Name="ProductID" Type="Int32" />
     <Property Name="UserId" Type="Int32" />
     <Property Name="Quantity" Type="Int32" />
-    <Property Name="Price" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="Price" Type="Decimal" Precision="18" Scale="2" />
     <NavigationProperty Name="Products" Relationship="database2Model.FK_Cart_Products" FromRole="Cart" ToRole="Products" />
     <NavigationProperty Name="User" Relationship="database2Model.FK_Cart_User" FromRole="Cart" ToRole="User" />
     <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -186,6 +193,31 @@
       </Principal>
       <Dependent Role="Cart">
         <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="PurchaseDetails">
+    <Key>
+      <PropertyRef Name="PurchaseID" />
+    </Key>
+    <Property Name="PurchaseID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProductId" Type="Int32" />
+    <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Quantity" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Price" Type="Decimal" Precision="18" Scale="0" />
+    <NavigationProperty Name="Products" Relationship="database2Model.FK_PurchaseDetails_Products" FromRole="PurchaseDetails" ToRole="Products" />
+    <Property Name="DateofPurchase" Type="DateTime" Precision="0" />
+  </EntityType>
+  <Association Name="FK_PurchaseDetails_Products">
+    <End Type="database2Model.Products" Role="Products" Multiplicity="0..1" />
+    <End Type="database2Model.PurchaseDetails" Role="PurchaseDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ProductID" />
+      </Principal>
+      <Dependent Role="PurchaseDetails">
+        <PropertyRef Name="ProductId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

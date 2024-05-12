@@ -86,7 +86,7 @@
                         {
                             <a href="#" class="btn btn-primary">Buy</a>
                         }
-                            //if ang user kay dili seller maka punta sa store which is naka locate sa test
+                            @*//if ang user kay dili seller maka punta sa store which is naka locate sa test*@
                             @if (!User.IsInRole("Seller"))
                             {
                                 <a href="@Url.Action("test", "Home", new { username = product.sellerName })">Seller:@product.sellerName</a>

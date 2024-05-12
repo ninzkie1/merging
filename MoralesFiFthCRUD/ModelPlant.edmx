@@ -13,7 +13,7 @@
           <Property Name="ProductID" Type="int" />
           <Property Name="UserId" Type="int" />
           <Property Name="Quantity" Type="int" />
-          <Property Name="Price" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="2" />
           <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
           <Property Name="description" Type="nvarchar" MaxLength="50" />
           <Property Name="CategoryName" Type="nvarchar" MaxLength="50" />
@@ -40,6 +40,18 @@
           <Property Name="ProductImg" Type="image" />
           <Property Name="Quantity" Type="int" />
         </EntityType>
+        <EntityType Name="PurchaseDetails">
+          <Key>
+            <PropertyRef Name="PurchaseID" />
+          </Key>
+          <Property Name="PurchaseID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductId" Type="int" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Quantity" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="DateofPurchase" Type="date" />
+        </EntityType>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="id" />
@@ -59,6 +71,7 @@
           <Property Name="firstname" Type="nvarchar" MaxLength="50" />
           <Property Name="lastname" Type="nvarchar" MaxLength="50" />
           <Property Name="phonenumber" Type="int" />
+          <Property Name="UserImg" Type="image" />
         </EntityType>
         <EntityType Name="UserRole">
           <Key>
@@ -127,6 +140,18 @@ warning 6002: The table/view 'database2.dbo.vw_UserRole' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PurchaseDetails_Products">
+          <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
+          <End Role="PurchaseDetails" Type="Self.PurchaseDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="PurchaseDetails">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Role_Role">
           <End Role="Role" Type="Self.Role" Multiplicity="1" />
           <End Role="Role1" Type="Self.Role" Multiplicity="0..1" />
@@ -163,22 +188,11 @@ warning 6002: The table/view 'database2.dbo.vw_UserRole' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_UserRole_UserRole">
-          <End Role="UserRole" Type="Self.UserRole" Multiplicity="1" />
-          <End Role="UserRole1" Type="Self.UserRole" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="UserRole">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="UserRole1">
-              <PropertyRef Name="id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="database2ModelStoreContainer">
           <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PurchaseDetails" EntityType="Self.PurchaseDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRole" EntityType="Self.UserRole" Schema="dbo" store:Type="Tables" />
@@ -205,6 +219,10 @@ warning 6002: The table/view 'database2.dbo.vw_UserRole' does not have a primary
             <End Role="User" EntitySet="User" />
             <End Role="Products" EntitySet="Products" />
           </AssociationSet>
+          <AssociationSet Name="FK_PurchaseDetails_Products" Association="Self.FK_PurchaseDetails_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="PurchaseDetails" EntitySet="PurchaseDetails" />
+          </AssociationSet>
           <AssociationSet Name="FK_Role_Role" Association="Self.FK_Role_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="Role1" EntitySet="Role" />
@@ -216,10 +234,6 @@ warning 6002: The table/view 'database2.dbo.vw_UserRole' does not have a primary
           <AssociationSet Name="FK_UserRole_User" Association="Self.FK_UserRole_User">
             <End Role="User" EntitySet="User" />
             <End Role="UserRole" EntitySet="UserRole" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserRole_UserRole" Association="Self.FK_UserRole_UserRole">
-            <End Role="UserRole" EntitySet="UserRole" />
-            <End Role="UserRole1" EntitySet="UserRole" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -249,6 +263,7 @@ warning 6002: The table/view 'database2.dbo.vw_UserRole' does not have a primary
           <NavigationProperty Name="Category" Relationship="Self.FK_Products_Category1" FromRole="Products" ToRole="Category" />
           <NavigationProperty Name="User" Relationship="Self.FK_Products_User" FromRole="Products" ToRole="User" />
           <NavigationProperty Name="Cart" Relationship="database2Model.FK_Cart_Products" FromRole="Products" ToRole="Cart" />
+          <NavigationProperty Name="PurchaseDetails" Relationship="database2Model.FK_PurchaseDetails_Products" FromRole="Products" ToRole="PurchaseDetails" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -273,6 +288,7 @@ warning 6002: The table/view 'database2.dbo.vw_UserRole' does not have a primary
           <NavigationProperty Name="Products" Relationship="Self.FK_Products_User" FromRole="User" ToRole="Products" />
           <NavigationProperty Name="UserRole" Relationship="Self.FK_UserRole_User" FromRole="User" ToRole="UserRole" />
           <NavigationProperty Name="Cart" Relationship="database2Model.FK_Cart_User" FromRole="User" ToRole="Cart" />
+          <Property Name="UserImg" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityType Name="UserRole">
           <Key>
@@ -373,6 +389,11 @@ warning 6002: The table/view 'database2.dbo.vw_UserRole' does not have a primary
             <End Role="User" EntitySet="User" />
             <End Role="Cart" EntitySet="Cart" />
           </AssociationSet>
+          <EntitySet Name="PurchaseDetails" EntityType="database2Model.PurchaseDetails" />
+          <AssociationSet Name="FK_PurchaseDetails_Products" Association="database2Model.FK_PurchaseDetails_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="PurchaseDetails" EntitySet="PurchaseDetails" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Cart">
           <Key>
@@ -382,7 +403,7 @@ warning 6002: The table/view 'database2.dbo.vw_UserRole' does not have a primary
           <Property Name="ProductID" Type="Int32" />
           <Property Name="UserId" Type="Int32" />
           <Property Name="Quantity" Type="Int32" />
-          <Property Name="Price" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="2" />
           <NavigationProperty Name="Products" Relationship="database2Model.FK_Cart_Products" FromRole="Cart" ToRole="Products" />
           <NavigationProperty Name="User" Relationship="database2Model.FK_Cart_User" FromRole="Cart" ToRole="User" />
           <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -412,6 +433,31 @@ warning 6002: The table/view 'database2.dbo.vw_UserRole' does not have a primary
             </Principal>
             <Dependent Role="Cart">
               <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PurchaseDetails">
+          <Key>
+            <PropertyRef Name="PurchaseID" />
+          </Key>
+          <Property Name="PurchaseID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductId" Type="Int32" />
+          <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="0" />
+          <NavigationProperty Name="Products" Relationship="database2Model.FK_PurchaseDetails_Products" FromRole="PurchaseDetails" ToRole="Products" />
+          <Property Name="DateofPurchase" Type="DateTime" Precision="0" />
+        </EntityType>
+        <Association Name="FK_PurchaseDetails_Products">
+          <End Type="database2Model.Products" Role="Products" Multiplicity="0..1" />
+          <End Type="database2Model.PurchaseDetails" Role="PurchaseDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="PurchaseDetails">
+              <PropertyRef Name="ProductId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -454,6 +500,7 @@ warning 6002: The table/view 'database2.dbo.vw_UserRole' does not have a primary
           <EntitySetMapping Name="User">
             <EntityTypeMapping TypeName="database2Model.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="UserImg" ColumnName="UserImg" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="username" ColumnName="username" />
                 <ScalarProperty Name="password" ColumnName="password" />
@@ -497,6 +544,19 @@ warning 6002: The table/view 'database2.dbo.vw_UserRole' does not have a primary
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="cartID" ColumnName="cartID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PurchaseDetails">
+            <EntityTypeMapping TypeName="database2Model.PurchaseDetails">
+              <MappingFragment StoreEntitySet="PurchaseDetails">
+                <ScalarProperty Name="DateofPurchase" ColumnName="DateofPurchase" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="PurchaseID" ColumnName="PurchaseID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

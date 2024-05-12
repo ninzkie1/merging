@@ -18,6 +18,8 @@
         <EntityTypeShape EntityType="database2Model.Cart" Width="1.5" PointX="8.25" PointY="1.5" />
         <AssociationConnector Association="database2Model.FK_Cart_Products" />
         <AssociationConnector Association="database2Model.FK_Cart_User" />
+        <EntityTypeShape EntityType="database2Model.PurchaseDetails" Width="1.5" PointX="9.625" PointY="5.875" />
+        <AssociationConnector Association="database2Model.FK_PurchaseDetails_Products" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

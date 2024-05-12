@@ -30,6 +30,7 @@ namespace MoralesFiFthCRUD
         public string firstname { get; set; }
         public string lastname { get; set; }
         public Nullable<int> phonenumber { get; set; }
+        public byte[] UserImg { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Products> Products { get; set; }

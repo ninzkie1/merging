@@ -34,6 +34,7 @@
     <EntitySetMapping Name="User">
       <EntityTypeMapping TypeName="database2Model.User">
         <MappingFragment StoreEntitySet="User">
+          <ScalarProperty Name="UserImg" ColumnName="UserImg" />
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="username" ColumnName="username" />
           <ScalarProperty Name="password" ColumnName="password" />
@@ -77,6 +78,19 @@
           <ScalarProperty Name="UserId" ColumnName="UserId" />
           <ScalarProperty Name="ProductID" ColumnName="ProductID" />
           <ScalarProperty Name="cartID" ColumnName="cartID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PurchaseDetails">
+      <EntityTypeMapping TypeName="database2Model.PurchaseDetails">
+        <MappingFragment StoreEntitySet="PurchaseDetails">
+          <ScalarProperty Name="DateofPurchase" ColumnName="DateofPurchase" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+          <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+          <ScalarProperty Name="PurchaseID" ColumnName="PurchaseID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
