@@ -17,6 +17,7 @@ namespace MoralesFiFthCRUD
         public int id { get; set; }
         public Nullable<int> userId { get; set; }
         public Nullable<int> roleId { get; set; }
+        public Nullable<int> productID { get; set; }
     
         public virtual Role Role { get; set; }
         public virtual User User { get; set; }

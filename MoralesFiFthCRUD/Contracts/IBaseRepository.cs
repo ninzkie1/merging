@@ -12,16 +12,7 @@ namespace MoralesFiFthCRUD.Contracts
         Error
     }
 
-    public enum UserRole
-    {
-        Tutor,
-        Client
-    }
-    public class User
-    {
-
-        public UserRole Role { get; set; }
-    }
+   
     public interface IBaseRepository<T>
     {
         T Get(object id);
@@ -33,6 +24,7 @@ namespace MoralesFiFthCRUD.Contracts
         ErrorCode Update(object id, T t);
 
         ErrorCode Delete(object id);
+       
 
     }
 }

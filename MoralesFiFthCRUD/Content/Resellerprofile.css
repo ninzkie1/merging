@@ -1,31 +1,6 @@
 ﻿
-  .rating {
-            display: inline-block;
-            unicode-bidi: bidi-override;
-            direction: rtl;
-            margin-top: 5px;
-        }
-
-            .rating > input {
-                display: none;
-            }
-
-            .rating > label {
-                position: relative;
-                width: 1.2em; /* changed width to make stars smaller */
-                font-size: 1.5em; /* changed font-size to make stars smaller */
-                color: #ffc107; /* changed color to active star color */
-                cursor: pointer;
-            }
-
-                .rating > label:before {
-                    content: "\2605";
-                    position: absolute;
-                    opacity: 1; /* changed opacity to make all stars visible */
-                    transition: opacity 0.2s linear;
-                }
-
-        /* Style adjustments */
+ 
+        
         .avatar-container {
             position: relative;
         }
@@ -34,19 +9,7 @@
                 margin-bottom: 10px;
             }
 
-        .eye-icon-container {
-            position: relative;
-        }
-
-        #eye-icon {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            z-index: 1;
-            color: #888; /* Changed eye icon color */
-        }
+        
 
         .password-input {
             position: relative;
@@ -73,7 +36,7 @@
         }
 
             .featured-plants .card img {
-                height: 200px;
+                height: 100px;
                 object-fit: cover; /* Ensure the image covers the entire box */
             }
 
@@ -86,15 +49,4 @@
                     color: #ffd700; /* Changed color to yellow */
                 }
 
-        /* Additional styling for eye icon */
-        .eye-icon-container {
-            position: absolute;
-            top: 50%;
-            right: 10px;
-            transform: translateY(-50%);
-        }
-
-            .eye-icon-container .input-group-text {
-                cursor: pointer;
-            }
-   
+       

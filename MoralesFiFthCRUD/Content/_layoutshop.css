@@ -1,0 +1,78 @@
+﻿
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .navbar {
+            background-color: #155724; /* Dark green */
+        }
+
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #fff;
+        }
+
+        .container {
+            padding-top: 10px;
+        }
+
+        .card {
+            border: none;
+            transition: box-shadow 0.3s ease;
+        }
+
+            .card:hover {
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            }
+
+        .card-image {
+            position: relative;
+            overflow: hidden;
+        }
+
+            .card-image img {
+                width: 100%;
+                height: auto;
+                transition: transform 0.3s ease;
+            }
+
+        .card:hover .card-image img {
+            transform: scale(1.1);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .card-text {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .btn-shop {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            font-size: 16px;
+            border-radius: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+            .btn-shop:hover {
+                background-color: #218838;
+            }
+   

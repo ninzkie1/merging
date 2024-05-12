@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,113 +6,69 @@
     <title>@ViewBag.Title - Plant Shop</title>
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f8f9fa;
-        }
+    <link rel="stylesheet" href="~/Content/_layoutshop.css" />
 
-        .navbar {
-            background-color: #155724; /* Dark green */
-        }
-
-        .navbar-brand, .navbar-nav .nav-link {
-            color: #fff;
-        }
-
-        .container {
-            padding-top: 10px;
-        }
-
-        .card {
-            border: none;
-            transition: box-shadow 0.3s ease;
-        }
-
-            .card:hover {
-                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            }
-
-        .card-image {
-            position: relative;
-            overflow: hidden;
-        }
-
-            .card-image img {
-                width: 100%;
-                height: auto;
-                transition: transform 0.3s ease;
-            }
-
-        .card:hover .card-image img {
-            transform: scale(1.1);
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        .card-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .card-text {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 15px;
-        }
-
-        .price {
-            font-size: 18px;
-            font-weight: bold;
-            color: #28a745;
-        }
-
-        .btn-shop {
-            background-color: #28a745;
-            color: #fff;
-            border: none;
-            padding: 8px 16px;
-            font-size: 16px;
-            border-radius: 20px;
-            transition: background-color 0.3s ease;
-        }
-
-            .btn-shop:hover {
-                background-color: #218838;
-            }
-    </style>
 </head>
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="#">Plant Shop</a>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <span class="navbar-text ml-auto">Welcome, @User.Identity.Name!</span>
+            }
+            else
+            {
+                <span class="navbar-text ml-auto">Welcome, GUEST!</span>
+            }
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="Dashboard">Home</a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link" href="About">About</a>
-                    </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="ContactUs">Contact</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Profile</a>
-                    </li>
+                    
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            @if (User.IsInRole("Seller"))
+                            {
+                                <a class="nav-link" href="~/Home/ResellerProfile">Profile</a>
+                            }
+                            else if (User.IsInRole("Buyer"))
+                            {
+                                <a class="nav-link" href="~/Home/UserProfile">Profile</a>
+                            }
+                            else
+                            {
+                                <a class="nav-link" href="#"></a>
+                            }
+                        </li>
+                        
+                        <li class="nav-item">
+                            <form action="@Url.Action("Logout", "Home")" method="post" class="form-inline">
+                                <button type="submit" class="btn btn-link nav-link">Logout</button>
+                            </form>
+                        </li>
+                        <li>
+                            @if (User.IsInRole("Buyer"))
+                            {
+                                <a class="nav-link" href="~/Home/ViewCart">View Cart</a>
+                            }
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="~/Home/Login">Login</a>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>
     </nav>
+
     <div class="container body-content">
         @RenderBody()
     </div>
