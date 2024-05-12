@@ -17,7 +17,7 @@ namespace MoralesFiFthCRUD.Controllers
 
     public class HomeController : BaseController
     {
-        
+
         private readonly database2Entities4 _dbContext;
         private readonly MailManager _mailManager;
 
@@ -49,7 +49,13 @@ namespace MoralesFiFthCRUD.Controllers
         [HttpPost]
         public ActionResult Login(User u)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                // Redirect to the Shop page
+                return RedirectToAction("Dashboard");
+            }
             var user = _userRepo._table.Where(m => m.username == u.username).FirstOrDefault();
+            
             if (user != null)
             {
                 if (user.password == u.password)
@@ -110,7 +116,7 @@ namespace MoralesFiFthCRUD.Controllers
             return RedirectToAction("LandingPage");
         }
 
-       
+
         [Authorize(Roles = "Admin,Buyer,Seller")]
         public ActionResult Edit(int id)
         {
@@ -126,7 +132,7 @@ namespace MoralesFiFthCRUD.Controllers
             return RedirectToAction("index");
 
         }
-        
+
         public ActionResult Delete(int id)
         {
             _userRepo.Delete(id);
@@ -150,7 +156,7 @@ namespace MoralesFiFthCRUD.Controllers
         {
             return View();
         }
-        
+
 
         public ActionResult SignUp()
         {
@@ -225,23 +231,23 @@ namespace MoralesFiFthCRUD.Controllers
         [HttpPost]
         public ActionResult GenerateOTP(string email)
         {
-            
+
             string generatedOTP = "";
             using (var rng = new RNGCryptoServiceProvider())
             {
-                byte[] tokenData = new byte[6]; 
+                byte[] tokenData = new byte[6];
                 rng.GetBytes(tokenData);
-                generatedOTP = string.Join("", tokenData.Select(b => (b % 10).ToString())); 
+                generatedOTP = string.Join("", tokenData.Select(b => (b % 10).ToString()));
             }
 
-            
+
             Session["GeneratedOTP"] = generatedOTP;
 
-           
+
             string errResponse = "";
             bool emailSent = _mailManager.SendEmail(email, "Your OTP", $"Your sign up OTP is: {generatedOTP}", generatedOTP, ref errResponse);
 
-            
+
             if (emailSent)
             {
                 return Json(new { success = true, message = "OTP sent successfully!" });
@@ -268,7 +274,7 @@ namespace MoralesFiFthCRUD.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Seller")]
-        public ActionResult SellerView(string productName, int categoryId, HttpPostedFileBase productImage, string productDescription,decimal productPrice, int productQuantity)
+        public ActionResult SellerView(string productName, int categoryId, HttpPostedFileBase productImage, string productDescription, decimal productPrice, int productQuantity)
         {
             // Get the username of the currently logged-in user
             string userName = User.Identity.Name;
@@ -437,6 +443,7 @@ namespace MoralesFiFthCRUD.Controllers
 
             return RedirectToAction("ResellerProfile");
         }
+        [HttpGet]
         [Authorize(Roles = "Seller")]
         public ActionResult EditProduct(int id)
         {
@@ -445,13 +452,13 @@ namespace MoralesFiFthCRUD.Controllers
             if (product == null)
             {
                 TempData["ErrorMsg"] = "Product not found.";
-                return RedirectToAction("ResellerProfile");
+                return RedirectToAction("Shop");
             }
 
             if (product.UserId != GetCurrentUserId())
             {
                 TempData["ErrorMsg"] = "You are not authorized to edit this product.";
-                return RedirectToAction("ResellerProfile");
+                return RedirectToAction("Shop");
             }
 
             var viewModel = new ProductViewModel
@@ -460,8 +467,9 @@ namespace MoralesFiFthCRUD.Controllers
                 ProductName = product.ProductName,
                 CategoryId = product.CategoryId ?? 0,
                 Description = product.description,
-                Quantity = product.Quantity ?? 0, // Assuming Quantity can be null
-                Price = product.price ?? 0m  // Assuming Price can be null
+                Quantity = product.Quantity ?? 0,
+                Price = product.price ?? 0
+                // ProductImg = product.ProductImg // If you're handling image edits
             };
 
             ViewBag.Categories = new SelectList(_dbContext.Category, "id", "CategoryName", viewModel.CategoryId);
@@ -470,7 +478,8 @@ namespace MoralesFiFthCRUD.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Seller")]
-        public ActionResult EditProduct(ProductViewModel productVM, HttpPostedFileBase productImage)
+        [ValidateAntiForgeryToken]
+        public ActionResult EditProduct(ProductViewModel productVM)
         {
             if (!ModelState.IsValid)
             {
@@ -483,37 +492,43 @@ namespace MoralesFiFthCRUD.Controllers
             if (product == null)
             {
                 TempData["ErrorMsg"] = "Product not found.";
-                return RedirectToAction("ResellerProfile");
+                return RedirectToAction("Shop");
             }
 
             if (product.UserId != GetCurrentUserId())
             {
                 TempData["ErrorMsg"] = "You are not authorized to edit this product.";
-                return RedirectToAction("ResellerProfile");
+                return RedirectToAction("Shop");
             }
 
-            // Update product properties
             product.ProductName = productVM.ProductName;
             product.CategoryId = productVM.CategoryId;
             product.description = productVM.Description;
             product.Quantity = productVM.Quantity;
             product.price = productVM.Price;
 
-            // Handle image update
-            if (productImage != null && productImage.ContentLength > 0)
+            // If butangan og Image
+            // if (productVM.ProductImg != null)
+            // {
+            //     product.ProductImg = productVM.ProductImg;
+            // }
+
+            _dbContext.Entry(product).State = EntityState.Modified;
+
+            try
             {
-                // ... (Your existing image validation logic) ...
-
-                using (var binaryReader = new BinaryReader(productImage.InputStream))
-                {
-                    product.ProductImg = binaryReader.ReadBytes(productImage.ContentLength);
-                }
+                _dbContext.SaveChanges();
+                TempData["SuccessMsg"] = "Product updated successfully!";
+                return RedirectToAction("ResellerProfile");
             }
-
-            _dbContext.SaveChanges();
-            TempData["SuccessMsg"] = "Product updated successfully!";
-            return RedirectToAction("ResellerProfile");
+            catch (Exception ex)
+            {
+                TempData["ErrorMsg"] = "Failed to update product: " + ex.Message;
+                return RedirectToAction("ResellerProfile");
+            }
         }
+
+
 
         // Helper method to get the current user's ID
         private int GetCurrentUserId()
@@ -567,28 +582,33 @@ namespace MoralesFiFthCRUD.Controllers
             {
                 var boughtProduct = new Cart
                 {
-                    
+
                     ProductID = product.ProductID,
                     UserId = buyer.id,
                     BuyerName = buyerName,
                     Quantity = quantity,
                     Price = product.price,
-                    CategoryName = product.Category.CategoryName,   
+                    CategoryName = product.Category.CategoryName,
                     ProductName = product.ProductName,
                     description = product.description,
                     ProductImg = product.ProductImg
-                    
+
                     // Add other relevant fields if needed
                 };
 
                 _dbContext.Cart.Add(boughtProduct);
+            }
+            if (product.SoldOut)
+            {
+                TempData["ErrorMsg"] = "This product is sold out.";
+                return RedirectToAction("Shop");
             }
 
             product.Quantity -= quantity; // Update product inventory
 
             if (product.Quantity == 0)
             {
-                _dbContext.Products.Remove(product);
+                product.SoldOut = true;
             }
 
             _dbContext.SaveChanges();
@@ -599,13 +619,13 @@ namespace MoralesFiFthCRUD.Controllers
 
         public ActionResult Shop(string searchTerm, string sellerName)
         {
-         
+
             var products = _dbContext.Products.ToList();
 
-           
+
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                
+
                 products = products.Where(p => p.ProductName.Contains(searchTerm)).ToList();
             }
             if (!string.IsNullOrWhiteSpace(sellerName))
@@ -613,26 +633,26 @@ namespace MoralesFiFthCRUD.Controllers
                 products = products.Where(p => p.User.username == sellerName).ToList();
             }
 
-           var sellerProducts = products.Where(p => p.User.UserRole.Any(r => r.Role.roleName == "Seller"))
-                   .Select(p => new ProductViewModel
-                   {
- 
-                       ProductID = p.ProductID,
-                       ProductName = p.ProductName,
-                       Category = p.Category != null ? p.Category.CategoryName : "N/A",
-                       ProductImg = p.ProductImg,
-                       Description = p.description,
-                       Quantity = p.Quantity ?? 0,
-                       Price = p.price ?? 0,
-                       sellerName = p.User.username
-                   })
-                    .ToList();
+            var sellerProducts = products.Where(p => p.User.UserRole.Any(r => r.Role.roleName == "Seller"))
+                    .Select(p => new ProductViewModel
+                    {
+
+                        ProductID = p.ProductID,
+                        ProductName = p.ProductName,
+                        Category = p.Category != null ? p.Category.CategoryName : "N/A",
+                        ProductImg = p.ProductImg,
+                        Description = p.description,
+                        Quantity = p.Quantity ?? 0,
+                        Price = p.price ?? 0,
+                        sellerName = p.User.username
+                    })
+                     .ToList();
 
             // Pass the list of seller products to the view
             return View(sellerProducts);
         }
 
-        [Authorize(Roles="Buyer")]
+        [Authorize(Roles = "Buyer")]
         public ActionResult ViewCart()
         {
             string buyerName = User.Identity.Name;
@@ -660,11 +680,53 @@ namespace MoralesFiFthCRUD.Controllers
                     Price = p.Price ?? 0,
                     sellerName = p.Products.User.username, // Assuming you want the seller's name
                     BuyerName = buyerName // Add buyer's username 
-        })
+                })
                 .ToList();
 
             return View(boughtProducts);
         }
+
+
+        [HttpPost]
+        public ActionResult DecrementQuantity(int productId)
+        {
+            // Retrieve the product from the cart
+            var productInCart = _dbContext.Cart.FirstOrDefault(p => p.ProductID == productId);
+            if (productInCart != null)
+            {
+                // Decrement the quantity in the cart
+                productInCart.Quantity--;
+
+                // Check if the quantity becomes 0
+                if (productInCart.Quantity <= 0)
+                {
+                    // Remove the product from the cart
+                    _dbContext.Cart.Remove(productInCart);
+                }
+
+                // Calculate the total price to be subtracted
+                decimal pricePerUnit = productInCart.Price ?? 0;
+                decimal totalPriceToSubtract = pricePerUnit;
+
+                // Update the cart in the database
+                _dbContext.SaveChanges();
+
+                // Retrieve the corresponding product from the inventory
+                var productInInventory = _dbContext.Products.FirstOrDefault(p => p.ProductID == productId);
+                if (productInInventory != null)
+                {
+                    // Adjust the product price in the inventory based on the decremented quantity
+                    productInInventory.price -= totalPriceToSubtract;
+
+                    // Update the inventory in the database
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            // Redirect back to the cart page or wherever you want to go after decrementing the quantity
+            return RedirectToAction("ViewCart");
+        }
+
 
     }
 

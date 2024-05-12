@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "Edit Product";
-    Layout = null;
+    Layout = null; // Or your layout page
 }
 
 @Html.AntiForgeryToken()
@@ -13,7 +13,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Product</title>
-    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -24,60 +23,43 @@
                 <div class="card p-4">
                     <div class="card-body">
                         <h5 class="card-title text-center mb-4">Edit Product</h5>
-                        @using (Html.BeginForm("SellerView", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        @using (Html.BeginForm("EditProduct", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
                         {
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(m => m.ProductID)
                             <div class="form-group">
                                 <label for="productName">Product Name:</label>
-                                <input type="text" id="productName" name="productName" class="form-control" required>
+                                @Html.TextBoxFor(m => m.ProductName, new { @class = "form-control", required = "required" })
                             </div>
                             <div class="form-group">
                                 <label for="categoryId">Category:</label>
-                                <!-- Assuming categoryId is selected from a dropdown -->
-                                <select id="categoryId" name="categoryId" class="form-control" required>
-                                    <option value="1">Plant</option>
-                                    <option value="2">Soil</option>
-                                    <option value="3">Fertilizer</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="productImage">Product Image:</label>
-                                <input type="file" id="productImage" name="productImage" class="form-control" accept="image/*" required>
+                                @Html.DropDownListFor(m => m.CategoryId, (SelectList)ViewBag.Categories, new { @class = "form-control", required = "required" })
                             </div>
                             <div class="form-group">
                                 <label for="productDescription">Product Description:</label>
-                                <textarea id="productDescription" name="productDescription" class="form-control" required></textarea>
+                                @Html.TextAreaFor(m => m.Description, new { @class = "form-control", required = "required" })
                             </div>
                             <div class="form-group">
                                 <label for="productPrice">Price:</label>
-                                <input type="text" id="productPrice" name="productPrice" class="form-control" required>
+                                @Html.TextBoxFor(m => m.Price, new { @class = "form-control", required = "required", type = "number" })
                             </div>
                             <div class="form-group">
                                 <label for="productQuantity">Quantity:</label>
-                                <div class="input-group">
-                                    <span class="input-group-prepend">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="decrementQuantity()">-</button>
-                                    </span>
-                                    <input type="number" id="productQuantity" name="productQuantity" class="form-control" value="1" min="1" max="999" required>
-                                    <span class="input-group-append">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="incrementQuantity()">+</button>
-                                    </span>
-                                </div>
+                                @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control", required = "required", type = "number", min = "1" })
                             </div>
-                            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                            <button type="submit" class="btn btn-primary btn-block">Save Changes</button>
                         }
 
-                        @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+                        @if (TempData["SuccessMsg"] != null)
+                        {
+                            <div class="alert alert-success mt-4">
+                                @TempData["SuccessMsg"]
+                            </div>
+                        }
+                        @if (TempData["ErrorMsg"] != null)
                         {
                             <div class="alert alert-danger mt-4">
-                                <ul>
-                                    @foreach (var modelState in ViewData.ModelState.Values)
-                                    {
-                                        foreach (var error in modelState.Errors)
-                                        {
-                                            <li>@error.ErrorMessage</li>
-                                        }
-                                    }
-                                </ul>
+                                @TempData["ErrorMsg"]
                             </div>
                         }
                     </div>
@@ -85,12 +67,5 @@
             </div>
         </div>
     </div>
-
-    <script src="~/Scripts/quantityselector.js"></script>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.5.4/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 </body>
 </html>

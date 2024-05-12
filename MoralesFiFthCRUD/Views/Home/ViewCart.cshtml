@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width" />
     <title>View Cart</title>
     <style>
-        /* Style for product cards */
+        /* Styles for product cards */
         .product-card {
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -53,7 +53,6 @@
         @foreach (var product in Model)
         {
             <div class="product-card">
-
                 @if (product.ProductImg != null && product.ProductImg.Length > 0)
                 {
                     <img src="data:image;base64,@(Convert.ToBase64String(product.ProductImg))" class="card-img-top" alt="Product Image">
@@ -68,7 +67,11 @@
                     <div class="product-description">@product.Description</div>
                     <p class="card-text">₱@product.Price.ToString("N2")</p>
                     <div class="product-quantity">Quantity: @product.Quantity</div>
-
+                    <!-- Form for decrementing quantity -->
+                    <form method="post" action="~/Home/DecrementQuantity">
+                        <input type="hidden" name="productId" value="@product.ProductID" />
+                        <button type="submit" class="btn btn-primary">Decrement Quantity</button>
+                    </form>
                 </div>
                 <a href="~/Home/DeleteProduct/@product.ProductID" class="btn btn-danger">Delete</a>
             </div>
