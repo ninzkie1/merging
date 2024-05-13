@@ -24,9 +24,9 @@ namespace MoralesFiFthCRUD
         public string CategoryName { get; set; }
         public byte[] ProductImg { get; set; }
         public string BuyerName { get; set; }
+        public string SellerName { get; set; }
     
         public virtual Products Products { get; set; }
         public virtual User User { get; set; }
-        public virtual BoughtProducts BoughtProducts { get; set; }
     }
 }

@@ -18,12 +18,12 @@ namespace MoralesFiFthCRUD.Controllers
     public class HomeController : BaseController
     {
 
-        private readonly database2Entities15 _dbContext;
+        private readonly database2Entities16 _dbContext;
         private readonly MailManager _mailManager;
 
         public HomeController()
         {
-            _dbContext = new database2Entities15();
+            _dbContext = new database2Entities16();
             _mailManager = new MailManager();
         }
 
@@ -55,7 +55,7 @@ namespace MoralesFiFthCRUD.Controllers
                 return RedirectToAction("Dashboard");
             }
             var user = _userRepo._table.Where(m => m.username == u.username).FirstOrDefault();
-            
+
             if (user != null)
             {
                 if (user.password == u.password)
@@ -73,7 +73,7 @@ namespace MoralesFiFthCRUD.Controllers
         {
             return View();
         }
-
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult Create(User u, string SelectedRole)
         {
@@ -132,13 +132,8 @@ namespace MoralesFiFthCRUD.Controllers
             return RedirectToAction("index");
 
         }
-
-        public ActionResult Delete(int id)
-        {
-            _userRepo.Delete(id);
-            TempData["Msg"] = $"User deleted!";
-            return RedirectToAction("index");
-        }
+     
+        
         public ActionResult LandingPage()
         {
             return View();
@@ -157,7 +152,7 @@ namespace MoralesFiFthCRUD.Controllers
             return View();
         }
 
-
+        [AllowAnonymous]
         public ActionResult SignUp()
         {
             return View();
@@ -306,11 +301,11 @@ namespace MoralesFiFthCRUD.Controllers
                 return View(); // Return to the view to display the error message
             }
 
-            
+
             if (!productImage.ContentType.StartsWith("image/"))
             {
                 ModelState.AddModelError("", "Please upload a valid image file.");
-                return View(); 
+                return View();
             }
 
             // Check if the file size is within the limit (e.g., 5MB)
@@ -327,25 +322,25 @@ namespace MoralesFiFthCRUD.Controllers
                 imageData = binaryReader.ReadBytes(productImage.ContentLength);
             }
 
-           
+
             var product = new Products
             {
-                
+
                 ProductName = productName,
                 CategoryId = categoryId,
                 UserId = user.id,
                 price = productPrice,
                 description = productDescription,
-                Quantity = productQuantity, 
-                ProductImg = imageData 
+                Quantity = productQuantity,
+                ProductImg = imageData
             };
 
-            
+
             _productRepo.Create(product);
 
             TempData["SuccessMsg"] = "Product added successfully!";
 
-            return RedirectToAction("SellerView"); 
+            return RedirectToAction("SellerView");
         }
 
 
@@ -358,7 +353,7 @@ namespace MoralesFiFthCRUD.Controllers
         }
         [Authorize(Roles = "Buyer")]
         public ActionResult Userprofile()
-      
+
         {
             string userName = User.Identity.Name;
 
@@ -366,7 +361,7 @@ namespace MoralesFiFthCRUD.Controllers
 
             if (user == null)
             {
-                return View("Error");
+                return View("Shop");
             }
 
             var userProfile = new SellerViewModel
@@ -381,7 +376,7 @@ namespace MoralesFiFthCRUD.Controllers
 
                 // Corrected: Products is a List<ProductViewModel>
             };
-           
+
 
             return View(userProfile);
         }
@@ -424,7 +419,7 @@ namespace MoralesFiFthCRUD.Controllers
 
             if (user == null)
             {
-                return View("Error");
+                return View("Shop");
             }
 
             var sellerProfile = new SellerViewModel
@@ -436,8 +431,8 @@ namespace MoralesFiFthCRUD.Controllers
                 phonenumber = user.phonenumber ?? 0,
                 address = user.address,
                 passWord = user.password,
-               
-                // Corrected: Products is a List<ProductViewModel>
+
+                
                 Products = _dbContext.Products
                     .Where(p => p.UserId == user.id)
                     .Select(p => new ProductViewModel
@@ -449,7 +444,7 @@ namespace MoralesFiFthCRUD.Controllers
                         Description = p.description,
                         Quantity = p.Quantity ?? 0,
                         Price = p.price ?? 0,
-                        sellerName = p.User.username
+                        
                     })
                     .ToList()
             };
@@ -487,11 +482,11 @@ namespace MoralesFiFthCRUD.Controllers
         }
 
 
-
+        //viewStore
         [AllowAnonymous]
         public ActionResult test(string username)
         {
-           
+
             var user = _dbContext.User.FirstOrDefault(u => u.username == username);
             if (user == null)
             {
@@ -500,7 +495,7 @@ namespace MoralesFiFthCRUD.Controllers
 
             var products = _dbContext.Products
                 .Where(p => p.UserId == user.id && p.Category != null)
-                .ToList() 
+                .ToList()
                 .Select(p => new ProductViewModel
                 {
                     ProductID = p.ProductID,
@@ -509,12 +504,34 @@ namespace MoralesFiFthCRUD.Controllers
                     ProductImg = p.ProductImg,
                     Description = p.description,
                     Quantity = p.Quantity ?? 0,
-                    sellerName = p.User.username,
                     Price = p.price ?? 0,
+                    sellerName =_dbContext.Products
+                        .Where(pr => pr.ProductID == p.ProductID)
+                        .Select(pr => pr.User.username)
+                        .FirstOrDefault()
                 })
                 .ToList();
+        
 
             return View(products);
+        }
+        
+        public ActionResult PublicDelete(int id)
+        {
+            var result = _productRepo.Delete(id);
+
+            if (result == ErrorCode.Success)
+            {
+                // Product deleted successfully
+                TempData["SuccessMsg"] = "Product deleted successfully!";
+            }
+            else
+            {
+                // Failed to delete product
+                TempData["ErrorMsg"] = "Failed to delete product.";
+            }
+
+            return RedirectToAction("Shop");
         }
 
         [Authorize(Roles = "Seller")]
@@ -562,7 +579,7 @@ namespace MoralesFiFthCRUD.Controllers
                 Description = product.description,
                 Quantity = product.Quantity ?? 0,
                 Price = product.price ?? 0
-               
+
             };
 
             ViewBag.Categories = new SelectList(_dbContext.Category, "id", "CategoryName", viewModel.CategoryId);
@@ -684,7 +701,9 @@ namespace MoralesFiFthCRUD.Controllers
                     CategoryName = product.Category.CategoryName,
                     ProductName = product.ProductName,
                     description = product.description,
-                    ProductImg = product.ProductImg
+                    ProductImg = product.ProductImg,
+                    SellerName = product.sellerName
+
 
                     // Add other relevant fields if needed
                 };
@@ -694,7 +713,7 @@ namespace MoralesFiFthCRUD.Controllers
 
             product.Quantity -= quantity; // Update product inventory
 
-            
+
 
             _dbContext.SaveChanges();
 
@@ -736,7 +755,7 @@ namespace MoralesFiFthCRUD.Controllers
                     })
                      .ToList();
 
-           
+
             return View(sellerProducts);
         }
 
@@ -752,22 +771,24 @@ namespace MoralesFiFthCRUD.Controllers
                 return View("Login");
             }
 
-           
+
             var boughtProducts = _dbContext.Cart
                 .Where(p => p.UserId == buyer.id)
-                .Include(p => p.Products) 
+                .Include(p => p.Products)
                 .ToList()
                 .Select(p => new ProductViewModel
                 {
                     ProductID = p.Products.ProductID,
-                    ProductName = p.Products.ProductName, 
+                    ProductName = p.Products.ProductName,
                     Category = p.Products.Category != null ? p.Products.Category.CategoryName : "N/A",
                     ProductImg = p.Products.ProductImg,
                     Description = p.Products.description,
                     Quantity = p.Quantity ?? 0,
                     Price = p.Price ?? 0,
-                    sellerName = p.Products.User.username,
-                    BuyerName = buyerName 
+                    sellerName = _dbContext.Products
+                        .Where(pr => pr.ProductID == p.ProductID)
+                        .Select(pr => pr.User.username)
+                        .FirstOrDefault()
                 })
                 .ToList();
 
@@ -825,20 +846,105 @@ namespace MoralesFiFthCRUD.Controllers
         }
 
 
-        public ActionResult Transaction()
+        [Authorize(Roles = "Buyer")]
+        public ActionResult ConfirmPurchase()
         {
+            string buyerName = User.Identity.Name;
+            var buyer = _dbContext.User.FirstOrDefault(u => u.username == buyerName);
 
-            return View();
+            if (buyer == null)
+            {
+                TempData["ErrorMsg"] = "User not found.";
+                return RedirectToAction("ViewCart");
+            }
+
+            // Retrieve cart items for the buyer
+            var cartItems = _dbContext.Cart.Where(c => c.UserId == buyer.id).ToList();
+
+            if (cartItems.Count == 0)
+            {
+                TempData["ErrorMsg"] = "Your cart is empty.";
+                return RedirectToAction("ViewCart");
+            }
+
+            foreach (var cartItem in cartItems)
+            {
+                var boughtProduct = new BoughtProducts
+                {
+                    ProductId = cartItem.ProductID,
+                    UserId = cartItem.UserId,
+                    Quantity = cartItem.Quantity,
+                    TotalAmmount = cartItem.Price,
+                    DateofPurchase = DateTime.Now,
+                    ProductName = cartItem.ProductName,
+                    Description = cartItem.description,
+                    SellerName = cartItem.SellerName
+                };
+
+
+                _dbContext.BoughtProducts.Add(boughtProduct);
+
+
+                _dbContext.Cart.Remove(cartItem);
+            }
+
+            // Save changes to the database
+            _dbContext.SaveChanges();
+
+            TempData["SuccessMsg"] = "Purchase completed successfully!";
+            return RedirectToAction("BoughtItems");
         }
-        
 
 
 
+
+
+        public ActionResult BoughtItems()
+        {
+            string buyerName = User.Identity.Name;
+            var buyer = _dbContext.User.FirstOrDefault(u => u.username == buyerName);
+
+            if (buyer == null)
+            {
+                return View("Login");
+            }
+
+            var boughtProducts = _dbContext.BoughtProducts
+                .Where(p => p.UserId == buyer.id)
+                .ToList()
+                .Select(p => new ProductViewModel
+                {
+                    ProductID = p.ProductId ?? 0,
+                    UserId = p.UserId ?? 0,
+                    Quantity = p.Quantity ?? 0,
+                    TotalPrice = p.TotalAmmount ?? 0,
+                    PurchaseDate = p.DateofPurchase.Value,
+                    ProductName = p.ProductName,
+                    Description = p.Description,
+                    
+                    // Retrieve the seller's name from the Products table
+                    sellerName = _dbContext.Products
+                        .Where(pr => pr.ProductID == p.ProductId)
+                        .Select(pr => pr.User.username)
+                        .FirstOrDefault()
+                })
+                .ToList();
+
+            return View(boughtProducts);
+        }
+    }
 
 
 
     }
 
-}
+
+
+
+
+
+
+
+
 
 

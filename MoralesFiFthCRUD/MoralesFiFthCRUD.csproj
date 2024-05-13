@@ -236,9 +236,6 @@
     <Compile Include="Role.cs">
       <DependentUpon>ModelPlant.tt</DependentUpon>
     </Compile>
-    <Compile Include="Transaction.cs">
-      <DependentUpon>ModelPlant.tt</DependentUpon>
-    </Compile>
     <Compile Include="User.cs">
       <DependentUpon>ModelPlant.tt</DependentUpon>
     </Compile>
@@ -284,7 +281,7 @@
     <Content Include="Views\Home\ViewCart.cshtml" />
     <Content Include="Views\Home\Shop.cshtml" />
     <Content Include="Views\Home\EditProduct.cshtml" />
-    <Content Include="Views\Home\Transaction.cshtml" />
+    <Content Include="Views\Home\BoughtItems.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

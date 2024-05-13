@@ -18,7 +18,6 @@ namespace MoralesFiFthCRUD
         public Products()
         {
             this.Cart = new HashSet<Cart>();
-            this.BoughtProducts = new HashSet<BoughtProducts>();
         }
     
         public int ProductID { get; set; }
@@ -29,12 +28,12 @@ namespace MoralesFiFthCRUD
         public Nullable<int> CategoryId { get; set; }
         public byte[] ProductImg { get; set; }
         public Nullable<int> Quantity { get; set; }
+        public Nullable<int> BoughtId { get; set; }
+        public string sellerName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cart> Cart { get; set; }
         public virtual Category Category { get; set; }
         public virtual User User { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BoughtProducts> BoughtProducts { get; set; }
     }
 }

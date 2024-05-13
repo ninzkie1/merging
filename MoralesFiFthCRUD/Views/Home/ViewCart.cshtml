@@ -3,28 +3,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>View Cart</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        /* Styles for product cards */
-        .product-card {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 20px;
-            width: 300px;
-            display: inline-block;
-            vertical-align: top;
-            margin-right: 20px;
-        }
-
+        /* Custom Styles */
         .product-img {
             width: 100%;
             border-radius: 5px;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .product-card {
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
         }
 
         .product-details {
-            margin-top: 10px;
+            padding: 15px;
         }
 
         .product-name {
@@ -34,7 +33,7 @@
 
         .product-category {
             font-style: italic;
-            color: #666;
+            color: #6c757d;
             margin-bottom: 5px;
         }
 
@@ -45,61 +44,53 @@
         .product-price {
             font-weight: bold;
         }
-
-        .btn-container {
-            margin-top: 10px;
-        }
-
-        .btn-checkout {
-            margin-top: 10px;
-        }
-
-        /* Total price styling */
-        .total-price {
-            font-size: 18px;
-            font-weight: bold;
-            color: green;
-            margin-bottom: 20px;
-        }
     </style>
 </head>
 <body>
-    <div>
+    <div class="container">
         <!-- Total price -->
         <div class="total-price">
-            Total Price: ₱@Model.Sum(p => p.Price).ToString("N2")
+            <h4>Total Price: ₱@Model.Sum(p => p.Price).ToString("N2")</h4>
         </div>
         <h2>Your Cart</h2>
-        @foreach (var product in Model)
-        {
-            <div class="product-card">
-                @if (product.ProductImg != null && product.ProductImg.Length > 0)
-                {
-                    <img src="data:image;base64,@(Convert.ToBase64String(product.ProductImg))" class="card-img-top" alt="Product Image">
-                }
-                else
-                {
-                    <p>No image available</p>
-                }
-                <div class="product-details">
-                    <div class="product-name">@product.ProductName</div>
-                    <div class="product-category">@product.Category</div>
-                    <div class="product-description">@product.Description</div>
-                    <p class="card-text">₱@product.Price.ToString("N2")</p>
-                    <div class="product-quantity">Quantity: @product.Quantity</div>
-                    <!-- Form for decrementing quantity -->
-                    <form method="post" action="~/Home/DecrementQuantity">
-                        <input type="hidden" name="productId" value="@product.ProductID" />
-                        <button type="submit" class="btn btn-Arrow">-</button>
-                    </form>
+        <div class="row">
+            @foreach (var product in Model)
+            {
+                <div class="col-md-4">
+                    <div class="product-card">
+                        @if (product.ProductImg != null && product.ProductImg.Length > 0)
+                        {
+                            <img src="data:image;base64,@(Convert.ToBase64String(product.ProductImg))" class="product-img" alt="Product Image">
+                        }
+                        else
+                        {
+                            <p class="text-center mt-3">No image available</p>
+                        }
+                        <div class="product-details">
+                            <div class="product-name">@product.ProductName</div>
+                            <div class="product-category">@product.Category</div>
+                            <div class="product-description">@product.Description</div>
+                            <p class="product-price">₱@product.Price.ToString("N2")</p>
+                            <div class="product-quantity">Quantity: @product.Quantity</div>
+                            <!-- Form for decrementing quantity -->
+                            <form method="post" action="~/Home/DecrementQuantity">
+                                <input type="hidden" name="productId" value="@product.ProductID" />
+                                <button type="submit" class="btn btn-secondary">-</button>
+                            </form>
+                        </div>
+                        <a href="~/Home/PublicDelete/@product.ProductID" class="btn btn-danger btn-block">Delete</a>
+                    </div>
                 </div>
-                <a href="~/Home/DeleteProduct/@product.ProductID" class="btn btn-danger">Delete</a>
-            </div>
-        }
+            }
+        </div>
         <div class="btn-container">
             <!-- Checkout button -->
-            <a href="~/Home/Checkout" class="btn btn-success btn-checkout">Checkout</a>
+            <a href="~/Home/ConfirmPurchase" class="btn btn-success btn-checkout">Buy</a>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

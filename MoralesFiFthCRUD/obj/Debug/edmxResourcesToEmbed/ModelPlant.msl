@@ -1,9 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="database2ModelStoreContainer" CdmEntityContainer="database2Entities15">
+  <EntityContainerMapping StorageEntityContainer="database2ModelStoreContainer" CdmEntityContainer="database2Entities16">
+    <EntitySetMapping Name="BoughtProducts">
+      <EntityTypeMapping TypeName="database2Model.BoughtProducts">
+        <MappingFragment StoreEntitySet="BoughtProducts">
+          <ScalarProperty Name="SellerName" ColumnName="SellerName" />
+          <ScalarProperty Name="PurchaseID" ColumnName="PurchaseID" />
+          <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+          <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="TotalAmmount" ColumnName="TotalAmmount" />
+          <ScalarProperty Name="DateofPurchase" ColumnName="DateofPurchase" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Cart">
       <EntityTypeMapping TypeName="database2Model.Cart">
         <MappingFragment StoreEntitySet="Cart">
+          <ScalarProperty Name="SellerName" ColumnName="SellerName" />
           <ScalarProperty Name="cartID" ColumnName="cartID" />
           <ScalarProperty Name="ProductID" ColumnName="ProductID" />
           <ScalarProperty Name="UserId" ColumnName="UserId" />
@@ -28,6 +44,7 @@
     <EntitySetMapping Name="Products">
       <EntityTypeMapping TypeName="database2Model.Products">
         <MappingFragment StoreEntitySet="Products">
+          <ScalarProperty Name="sellerName" ColumnName="sellerName" />
           <ScalarProperty Name="ProductID" ColumnName="ProductID" />
           <ScalarProperty Name="ProductName" ColumnName="ProductName" />
           <ScalarProperty Name="description" ColumnName="description" />
@@ -36,6 +53,7 @@
           <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
           <ScalarProperty Name="ProductImg" ColumnName="ProductImg" />
           <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="BoughtId" ColumnName="BoughtId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -44,20 +62,6 @@
         <MappingFragment StoreEntitySet="Role">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="roleName" ColumnName="roleName" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Transaction">
-      <EntityTypeMapping TypeName="database2Model.Transaction">
-        <MappingFragment StoreEntitySet="Transaction">
-          <ScalarProperty Name="PurchaseID" ColumnName="PurchaseID" />
-          <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-          <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="Price" ColumnName="Price" />
-          <ScalarProperty Name="DateofPurchase" ColumnName="DateofPurchase" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -108,20 +112,6 @@
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="username" ColumnName="username" />
           <ScalarProperty Name="roleName" ColumnName="roleName" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="BoughtProducts">
-      <EntityTypeMapping TypeName="database2Model.BoughtProducts">
-        <MappingFragment StoreEntitySet="BoughtProducts">
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="DateofPurchase" ColumnName="DateofPurchase" />
-          <ScalarProperty Name="TotalAmmount" ColumnName="TotalAmmount" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-          <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-          <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-          <ScalarProperty Name="PurchaseID" ColumnName="PurchaseID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

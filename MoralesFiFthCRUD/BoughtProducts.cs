@@ -22,9 +22,6 @@ namespace MoralesFiFthCRUD
         public Nullable<decimal> TotalAmmount { get; set; }
         public Nullable<System.DateTime> DateofPurchase { get; set; }
         public Nullable<int> UserId { get; set; }
-    
-        public virtual Cart Cart { get; set; }
-        public virtual Products Products { get; set; }
-        public virtual User User { get; set; }
+        public string SellerName { get; set; }
     }
 }

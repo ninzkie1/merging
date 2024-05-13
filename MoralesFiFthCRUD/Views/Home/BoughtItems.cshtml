@@ -1,0 +1,45 @@
+﻿
+@model List<MoralesFiFthCRUD.ViewModels.ProductViewModel>
+
+<h2>Bought Items</h2>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <th>Purchase Date</th>
+                <th>Seller</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ProductName</td>
+                    <td>@item.Description</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.TotalPrice</td>
+                    <td>@item.PurchaseDate.ToString("MM/dd/yyyy")</td>
+                    <!-- Assuming you have a SellerName property in the ProductViewModel -->
+                    <td>@item.sellerName</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3"></td>
+                <td>Total: @Model.Sum(p => p.TotalPrice)</td>
+                <td colspan="2"></td>
+            </tr>
+        </tfoot>
+    </table>
+}
+else
+{
+    <p>You haven't bought any items yet.</p>
+}
