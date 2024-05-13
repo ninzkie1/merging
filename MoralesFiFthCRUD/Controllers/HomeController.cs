@@ -358,10 +358,63 @@ namespace MoralesFiFthCRUD.Controllers
         }
         [Authorize(Roles = "Buyer")]
         public ActionResult Userprofile()
+      
         {
-            return View();
+            string userName = User.Identity.Name;
+
+            var user = _dbContext.User.FirstOrDefault(u => u.username == userName);
+
+            if (user == null)
+            {
+                return View("Error");
+            }
+
+            var userProfile = new SellerViewModel
+            {
+                UserID = user.id,
+                Firstname = user.firstname,
+                Lastname = user.lastname,
+                email = user.email,
+                phonenumber = user.phonenumber ?? 0,
+                address = user.address,
+                passWord = user.password
+
+                // Corrected: Products is a List<ProductViewModel>
+            };
+           
+
+            return View(userProfile);
         }
-        
+        [HttpPost]
+        [Authorize(Roles = "Buyer")]
+        [ValidateAntiForgeryToken]
+        public ActionResult SaveProfileUser(SellerViewModel sellerVM)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = _dbContext.User.Find(sellerVM.UserID);
+
+                if (user != null)
+                {
+                    user.firstname = sellerVM.Firstname;
+                    user.lastname = sellerVM.Lastname;
+                    user.email = sellerVM.email;
+                    user.phonenumber = sellerVM.phonenumber;
+                    user.address = sellerVM.address;
+
+                    _dbContext.SaveChanges();
+
+                    TempData["SuccessMsg"] = "Profile updated successfully!";
+                }
+                else
+                {
+                    TempData["ErrorMsg"] = "User not found.";
+                }
+            }
+
+            return RedirectToAction("UserProfile");
+        }
+
         [Authorize(Roles = "Seller")]
         public ActionResult Resellerprofile()
         {
