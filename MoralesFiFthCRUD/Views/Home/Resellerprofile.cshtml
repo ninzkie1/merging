@@ -109,7 +109,11 @@
                             <div class="form-group password-input">
                                 <label for="password"><h4>Password</h4></label>
                                 <div class="input-group">
-                                    <input type="password" class="form-control" name="password" id="password" placeholder="Password" title="Enter your password." value="John@123" disabled>
+                                    <input type="password" class="form-control" name="password" id="password"
+                                           placeholder="Password" title="Enter your password." value="@Model.passWord" disabled>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">Show</button>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
@@ -180,37 +184,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            $("#editBtn").click(function () {
-                // Enable input fields
-                $("#first_name, #last_name, #phone, #email, #location").prop("disabled", false);
-
-                // Show Save and Reset buttons, hide Edit button
-                $("#SaveBtn, #resetBtn").show();
-                $("#editBtn").hide();
-            });
-
-            $("#SaveBtn").click(function () {
-                // Submit the form
-                $("#registrationForm").submit();
-            });
-
-            $("#resetBtn").click(function () {
-                // Disable input fields
-                $("#first_name, #last_name, #phone, #email, #location").prop("disabled", true);
-
-                // Reset input fields to their original values (replace with your logic)
-                $("#first_name").val("@Model.Firstname");
-                $("#last_name").val("@Model.Lastname");
-                // ... reset other fields ...
-
-                // Show Edit button, hide Save and Reset buttons
-                $("#editBtn").show();
-                $("#SaveBtn, #resetBtn").hide();
-            });
-        });
-    </script>
+    <script src="~/scripts/ResellerProfileEdit.js"></script>
 </body>
 
 </html>

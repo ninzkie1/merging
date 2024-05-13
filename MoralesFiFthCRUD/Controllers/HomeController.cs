@@ -18,12 +18,12 @@ namespace MoralesFiFthCRUD.Controllers
     public class HomeController : BaseController
     {
 
-        private readonly database2Entities4 _dbContext;
+        private readonly database2Entities15 _dbContext;
         private readonly MailManager _mailManager;
 
         public HomeController()
         {
-            _dbContext = new database2Entities4();
+            _dbContext = new database2Entities15();
             _mailManager = new MailManager();
         }
 
@@ -330,6 +330,7 @@ namespace MoralesFiFthCRUD.Controllers
            
             var product = new Products
             {
+                
                 ProductName = productName,
                 CategoryId = categoryId,
                 UserId = user.id,
@@ -508,7 +509,7 @@ namespace MoralesFiFthCRUD.Controllers
                 Description = product.description,
                 Quantity = product.Quantity ?? 0,
                 Price = product.price ?? 0
-                // ProductImg = product.ProductImg // If you're handling image edits
+               
             };
 
             ViewBag.Categories = new SelectList(_dbContext.Category, "id", "CategoryName", viewModel.CategoryId);
@@ -637,24 +638,19 @@ namespace MoralesFiFthCRUD.Controllers
 
                 _dbContext.Cart.Add(boughtProduct);
             }
-            if (product.SoldOut)
-            {
-                TempData["ErrorMsg"] = "This product is sold out.";
-                return RedirectToAction("Shop");
-            }
 
             product.Quantity -= quantity; // Update product inventory
 
-            if (product.Quantity == 0)
-            {
-                product.SoldOut = true;
-            }
+            
 
             _dbContext.SaveChanges();
 
             TempData["SuccessMsg"] = "Purchase successful!";
             return RedirectToAction("Shop");
         }
+
+
+
 
         public ActionResult Shop(string searchTerm, string sellerName)
         {
@@ -700,7 +696,7 @@ namespace MoralesFiFthCRUD.Controllers
 
             if (buyer == null)
             {
-                return View("Error");
+                return View("Login");
             }
 
            
@@ -726,8 +722,8 @@ namespace MoralesFiFthCRUD.Controllers
         }
 
 
-        
-        [HttpPost]
+
+
         public ActionResult DecrementQuantity(int productId)
         {
             string buyerName = User.Identity.Name;
@@ -746,7 +742,7 @@ namespace MoralesFiFthCRUD.Controllers
 
                 // Calculate the price change
                 decimal originalPrice = productInCart.Products.price ?? 0;
-                decimal priceChange = originalPrice;
+                decimal newPrice = productInCart.Quantity * originalPrice ?? 0; // No need for ?? 0 here
 
                 if (productInCart.Quantity <= 0)
                 {
@@ -755,8 +751,16 @@ namespace MoralesFiFthCRUD.Controllers
                 }
                 else
                 {
-                    // Update price in Cart (optional)
-                    productInCart.Price -= priceChange;
+                    // Update total price based on new quantity
+                    productInCart.Price = newPrice;
+                }
+
+                // Find the actual product to increment its quantity
+                var product = _dbContext.Products.FirstOrDefault(p => p.ProductID == productId);
+                if (product != null)
+                {
+                    // Increment product quantity by 1 
+                    product.Quantity++;
                 }
 
                 // Save changes
@@ -766,6 +770,17 @@ namespace MoralesFiFthCRUD.Controllers
             TempData["SuccessMsg"] = "Product quantity decreased successfully.";
             return RedirectToAction("ViewCart");
         }
+
+
+        public ActionResult Transaction()
+        {
+
+            return View();
+        }
+        
+
+
+
 
 
 

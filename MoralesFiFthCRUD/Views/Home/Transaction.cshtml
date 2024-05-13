@@ -1,0 +1,28 @@
+﻿@model List<MoralesFiFthCRUD.BoughtProducts>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Transaction</title>
+</head>
+<body>
+    <h2>Transaction Details</h2>
+    <div>
+        @foreach (var product in Model)
+        {
+            <div>
+                <p>Product ID: @product.ProductId</p>
+                <p>Quantity: @product.ProductName</p>
+                <p>Price: @product.Price</p>
+                <p>Price: @product.Quantity</p>
+                <p>Price: @product.Description</p>
+                <p>Price: @product.DateofPurchase</p>
+
+                <!-- Display other product details as needed -->
+            </div>
+        }
+    </div>
+</body>
+</html>

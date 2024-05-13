@@ -45,10 +45,30 @@
         .product-price {
             font-weight: bold;
         }
+
+        .btn-container {
+            margin-top: 10px;
+        }
+
+        .btn-checkout {
+            margin-top: 10px;
+        }
+
+        /* Total price styling */
+        .total-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: green;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
     <div>
+        <!-- Total price -->
+        <div class="total-price">
+            Total Price: ₱@Model.Sum(p => p.Price).ToString("N2")
+        </div>
         <h2>Your Cart</h2>
         @foreach (var product in Model)
         {
@@ -70,12 +90,16 @@
                     <!-- Form for decrementing quantity -->
                     <form method="post" action="~/Home/DecrementQuantity">
                         <input type="hidden" name="productId" value="@product.ProductID" />
-                        <button type="submit" class="btn btn-primary">Decrement Quantity</button>
+                        <button type="submit" class="btn btn-Arrow">-</button>
                     </form>
                 </div>
                 <a href="~/Home/DeleteProduct/@product.ProductID" class="btn btn-danger">Delete</a>
             </div>
         }
+        <div class="btn-container">
+            <!-- Checkout button -->
+            <a href="~/Home/Checkout" class="btn btn-success btn-checkout">Checkout</a>
+        </div>
     </div>
 </body>
 </html>

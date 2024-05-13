@@ -8,13 +8,13 @@ namespace MoralesFiFthCRUD.Controllers
 {
     public class BaseController : Controller
     {
-        public database2Entities4 _db;
+        public database2Entities15 _db;
         public BaseRepository<User> _userRepo;
         public BaseRepository<UserRole> _userRole;
         public BaseRepository<Products> _productRepo;
         public BaseController()
         {
-            _db = new database2Entities4();
+            _db = new database2Entities15();
             _userRepo = new BaseRepository<User>();
             _userRole = new BaseRepository<UserRole>();
             _productRepo = new BaseRepository<Products>();

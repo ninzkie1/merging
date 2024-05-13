@@ -27,5 +27,6 @@ namespace MoralesFiFthCRUD
     
         public virtual Products Products { get; set; }
         public virtual User User { get; set; }
+        public virtual BoughtProducts BoughtProducts { get; set; }
     }
 }

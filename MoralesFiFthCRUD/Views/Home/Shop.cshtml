@@ -61,31 +61,38 @@
                         <p class="card-text">Price: ₱@product.Price.ToString("N2")</p>
                        
 
-                        @if (product.SoldOut)
-                        {
-                            <span class="text-danger">Sold Out</span>
-                        }
-                        else if (User.IsInRole("Buyer"))
-                        {
-                            <p>Quantity: @product.Quantity</p>
-                            <form method="post" action="@Url.Action("Buy", "Home")">
-                                <input type="hidden" name="productId" value="@product.ProductID" />
-                                <div class="form-group">
-                                    <label for="quantity">Quantity:</label>
-                                    <input type="number" class="form-control" id="quantity" name="quantity" value="1" min="1" />
-                                </div>
-                                <button type="submit" class="btn btn-primary">Buy</button>
-                            </form>
+                       @if (product.Quantity == 0)
+                       {
+    
+                        <span class="text-danger">SOLD</span>
+                       }
+                       else if (User.IsInRole("Buyer"))
+                       {
+                        <p>Quantity: @product.Quantity</p>
+                        <form method="post" action="@Url.Action("Buy", "Home")">
+                            <input type="hidden" name="productId" value="@product.ProductID" />
+                            <div class="form-group">
+                                <label for="quantity">Quantity:</label>
+                                <input type="number" class="form-control" id="quantity" name="quantity" value="1" min="1" />
+                            </div>
+                            <button type="submit" class="btn btn-primary">Buy</button>
+                        </form>
+                       }
+                       else if (!User.Identity.IsAuthenticated)
+                       {
+                        <a href="~/Home/Login" class="btn btn-primary">Buy</a>
+                       }
+                       else
+                       {
+    
+                        <p></p>
+                       }
 
-                        }
-                        else if (!User.Identity.IsAuthenticated)
-                        {
-                            <a href="~/Home/Login" class="btn btn-primary">Buy</a>
-                        }
-                        else
-                        {
-                            <a href="#" class="btn btn-primary">Buy</a>
-                        }
+                       
+                       
+
+
+
                             @*//if ang user kay dili seller maka punta sa store which is naka locate sa test*@
                             @if (!User.IsInRole("Seller"))
                             {
